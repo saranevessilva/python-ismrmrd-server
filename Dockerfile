@@ -47,7 +47,7 @@ RUN apk add --no-cache \
     sudo
 
 # ----- 2. Create a devcontainer without all of the build dependencies of MRD -----
-FROM python:3.12.0-slim AS python-mrd-devcontainer
+FROM python:3.12.0 AS python-mrd-devcontainer
 
 LABEL org.opencontainers.image.description="Python MRD Image Reconstruction and Analysis Server"
 LABEL org.opencontainers.image.url="https://github.com/kspaceKelvin/python-ismrmrd-server"
