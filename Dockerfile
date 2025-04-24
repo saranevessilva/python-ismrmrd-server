@@ -3,7 +3,10 @@ FROM python:3.12.0-slim AS mrd_converter
 ARG  DEBIAN_FRONTEND=noninteractive
 ENV  TZ=America/Chicago
 
-RUN  apt-get update && apt-get install -y git cmake g++ libhdf5-dev libxml2-dev libxslt1-dev libboost-all-dev libfftw3-dev libpugixml-dev
+RUN apt-get update && apt-get install -y \
+    git cmake g++ libhdf5-dev libxml2-dev libxslt1-dev libboost-all-dev libfftw3-dev libpugixml-dev && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
 RUN  mkdir -p /opt/code
 
 # ISMRMRD library
@@ -58,6 +61,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     nano \
     git && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
+    
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements.txt and install Python dependencies
 COPY requirements.txt /tmp/
@@ -80,11 +88,21 @@ RUN pip3 install h5py==3.10.0 ismrmrd==1.14.1
 # Clone additional repositories
 RUN mkdir -p /opt/code && \
     cd /opt/code && \
-    git clone https://github.com/saranevessilva/automated-fetal-mri.git && \
     git clone https://github.com/ismrmrd/ismrmrd-python-tools.git && \
     cd /opt/code/ismrmrd-python-tools && \
     pip3 install --no-cache-dir . && \
     pip freeze
+    
+# Clone automated-fetal-mri and pull LFS data
+RUN git clone https://github.com/saranevessilva/automated-fetal-mri.git /opt/code/automated-fetal-mri && \
+    cd /opt/code/automated-fetal-mri && \
+    git lfs install && \
+    git lfs pull
+
+# Copy the 'eagle' folder from automated-fetal-mri into the main folder
+RUN cp -r /opt/code/automated-fetal-mri/eagle /opt/code/python-ismrmrd-server/eagle
+
+RUN rm -rf /opt/code/automated-fetal-mri
 
 # matplotlib is used by rgb.py and provides various visualization tools including colormaps
 # pydicom is used by dicom2mrd.py to parse DICOM data
