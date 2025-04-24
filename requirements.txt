@@ -11,7 +11,7 @@ pandas==2.2.3
 torchio==0.20.3
 plotly
 nilearn
-monai==1.4.0
+monai
 matplotlib==3.8.2
 pydicom
 nnunetv2
