@@ -117,11 +117,5 @@ RUN apt-get update && \
 WORKDIR /opt/code/python-ismrmrd-server
 RUN git lfs pull
 
-# Entry point
-COPY "entrypoint.sh" /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
-ENTRYPOINT ["/bin/bash", "/usr/local/bin/entrypoint.sh"]
-
 CMD ["python3", "main.py", "-v", "-H=0.0.0.0", "-p=9002", "-l=/tmp/python-ismrmrd-server.log"]
 
