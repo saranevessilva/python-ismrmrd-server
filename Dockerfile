@@ -34,6 +34,18 @@ RUN cd /opt/code && \
 # Create archive of ISMRMRD libraries (including symlinks) for second stage
 RUN cd /usr/local/lib && tar -czvf libismrmrd.tar.gz libismrmrd*
 
+# Use Docker-in-Docker image
+FROM docker:latest
+
+# Install dependencies
+RUN apk add --no-cache \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg2 \
+    lsb-release \
+    sudo
+
 # ----- 2. Create a devcontainer without all of the build dependencies of MRD -----
 FROM python:3.12.0-slim AS python-mrd-devcontainer
 
@@ -61,11 +73,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     nano \
     git && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
-    
-RUN apt-get update && apt-get install -y \
-    gcc \
-    g++ \
-    && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements.txt and install Python dependencies
 COPY requirements.txt /tmp/
