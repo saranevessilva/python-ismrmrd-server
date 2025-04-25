@@ -217,7 +217,7 @@ RUN git clone https://github.com/saranevessilva/automated-fetal-mri.git /opt/cod
 
 # Copy the 'eagle' folder from automated-fetal-mri into the main folder
 
-RUN mkdir -p /opt/code/python-ismrmrd-server/eagle && \
+RUN mkdir -p /opt/code/python-ismrmrd-server && \
     cp -r /opt/code/automated-fetal-mri/eagle /opt/code/python-ismrmrd-server/eagle
     
 # RUN cp -r /opt/code/automated-fetal-mri/eagle /opt/code/python-ismrmrd-server/eagle
