@@ -216,7 +216,11 @@ RUN git clone https://github.com/saranevessilva/automated-fetal-mri.git /opt/cod
     git lfs pull
 
 # Copy the 'eagle' folder from automated-fetal-mri into the main folder
-RUN cp -r /opt/code/automated-fetal-mri/eagle /opt/code/python-ismrmrd-server/eagle
+
+RUN mkdir -p /opt/code/python-ismrmrd-server/eagle && \
+    cp -r /opt/code/automated-fetal-mri/eagle /opt/code/python-ismrmrd-server/eagle
+    
+# RUN cp -r /opt/code/automated-fetal-mri/eagle /opt/code/python-ismrmrd-server/eagle
 
 RUN rm -rf /opt/code/automated-fetal-mri
 
@@ -298,7 +302,7 @@ FROM python-mrd-devcontainer AS python-mrd-runtime
 # image. From the python-ismrmrd-server folder, uncomment the following lines
 # below and run the command:
 #    docker build --no-cache -t fire-python-custom -f docker/Dockerfile ./
-RUN mkdir -p /opt/code/python-ismrmrd-server
+# RUN mkdir -p /opt/code/python-ismrmrd-server
 COPY . /opt/code/python-ismrmrd-server
 
 # Throw an explicit error if docker build is run from the folder *containing*
